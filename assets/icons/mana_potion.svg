@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="256" height="256" viewBox="0 0 256 256">
+  <title>Mana potion</title>
+  <ellipse cx="128" cy="224" rx="52" ry="13" fill="#111" opacity="0.22"/>
+  <path d="M101 30 H155 V64 C155 75 185 95 190 139 C196 192 168 218 128 218 C88 218 60 192 66 139 C71 95 101 75 101 64 Z" fill="#d9e7ff" stroke="#1e3d7c" stroke-width="8" stroke-linejoin="round"/>
+  <path d="M78 143 C83 111 105 91 128 91 C151 91 173 111 178 143 C184 183 160 204 128 204 C96 204 72 183 78 143 Z" fill="#356fe8"/>
+  <rect x="96" y="28" width="64" height="28" rx="6" fill="#4b5471" stroke="#252b42" stroke-width="7"/>
+  <path d="M128 112 C144 137 158 155 158 174 C158 191 145 202 128 202 C111 202 98 191 98 174 C98 155 112 137 128 112 Z" fill="#d9f2ff"/>
+  <path d="M117 171 C117 179 122 184 130 184" fill="none" stroke="#356fe8" stroke-width="7" stroke-linecap="round"/>
+  <path d="M94 102 C103 90 113 84 126 82" fill="none" stroke="#fff" stroke-width="8" stroke-linecap="round" opacity="0.7"/>
+</svg>

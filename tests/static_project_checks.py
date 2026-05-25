@@ -14,8 +14,11 @@ def test_required_scene_nodes_exist() -> None:
 
     for node_name in [
         "StatsLabel",
+        "InventoryTitle",
+        "InventoryMenu",
         "InventoryList",
         "UseItemButton",
+        "CloseInventoryButton",
         "PickupMessageLabel",
         "HealthPickup",
         "MagicPickup",
@@ -30,6 +33,7 @@ def test_required_scene_nodes_exist() -> None:
         "EnemyHpLabel",
         "AttackButton",
         "SpellButton",
+        "HealButton",
         "GuardButton",
         "CloseButton",
     ]:

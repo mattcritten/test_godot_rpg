@@ -11,6 +11,8 @@ signal battle_closed
 @export var enemy_attack_damage: int = 5
 @export var attack_stamina_cost: int = 4
 @export var spell_magic_cost: int = 5
+@export var healing_spell_magic_cost: int = 6
+@export var healing_spell_amount: int = 12
 @export var guard_stamina_restore: int = 5
 
 @onready var title_label: Label = %TitleLabel
@@ -21,6 +23,7 @@ signal battle_closed
 @onready var message_label: Label = %MessageLabel
 @onready var attack_button: Button = %AttackButton
 @onready var spell_button: Button = %SpellButton
+@onready var heal_button: Button = %HealButton
 @onready var guard_button: Button = %GuardButton
 @onready var close_button: Button = %CloseButton
 @onready var player_battler: Node2D = %PlayerBattler
@@ -41,6 +44,7 @@ var action_effect_start_position: Vector2
 func _ready() -> void:
 	attack_button.pressed.connect(_on_attack_pressed)
 	spell_button.pressed.connect(_on_spell_pressed)
+	heal_button.pressed.connect(_on_heal_pressed)
 	guard_button.pressed.connect(_on_guard_pressed)
 	close_button.pressed.connect(_on_close_pressed)
 	player_start_position = player_battler.position
@@ -62,6 +66,8 @@ func start_battle(stats: PlayerStats, new_enemy_name: String = "Slime") -> void:
 	enemy_battler.scale = Vector2.ONE
 	player_battler.modulate = Color.WHITE
 	enemy_battler.modulate = Color.WHITE
+	player_battler.show()
+	enemy_battler.show()
 	action_effect_label.position = action_effect_start_position
 	action_effect_label.hide()
 	show()
@@ -88,7 +94,8 @@ func _on_attack_pressed() -> void:
 	_update_hp_labels()
 
 	if enemy_hp == 0:
-		_finish_battle(true)
+		await get_tree().create_timer(0.75).timeout
+		await _finish_battle(true)
 		return
 
 	_start_enemy_turn()
@@ -110,9 +117,30 @@ func _on_spell_pressed() -> void:
 	_update_hp_labels()
 
 	if enemy_hp == 0:
-		_finish_battle(true)
+		await get_tree().create_timer(0.75).timeout
+		await _finish_battle(true)
 		return
 
+	_start_enemy_turn()
+
+
+func _on_heal_pressed() -> void:
+	if not _can_take_player_action():
+		return
+
+	if not player_stats.spend_magic(healing_spell_magic_cost):
+		message_label.text = "You need %d magic to heal." % healing_spell_magic_cost
+		return
+
+	is_player_turn = false
+	_set_action_buttons_enabled(false)
+	await _play_heal_animation()
+
+	var previous_health: int = player_stats.health
+	player_stats.restore_health(healing_spell_amount)
+	var restored_health: int = player_stats.health - previous_health
+	message_label.text = "You restore %d health." % restored_health
+	_update_hp_labels()
 	_start_enemy_turn()
 
 
@@ -158,7 +186,8 @@ func _start_enemy_turn() -> void:
 	_update_hp_labels()
 
 	if player_stats.health == 0:
-		_finish_battle(false)
+		await get_tree().create_timer(0.75).timeout
+		await _finish_battle(false)
 		return
 
 	is_player_turn = true
@@ -172,8 +201,10 @@ func _finish_battle(player_won: bool) -> void:
 	close_button.show()
 
 	if player_won:
+		await _play_battler_disappear(enemy_battler)
 		message_label.text = "You defeated the %s." % enemy_name
 	else:
+		await _play_battler_disappear(player_battler)
 		message_label.text = "You were defeated."
 
 	battle_ended.emit(player_won)
@@ -182,6 +213,7 @@ func _finish_battle(player_won: bool) -> void:
 func _set_action_buttons_enabled(enabled: bool) -> void:
 	attack_button.disabled = not enabled
 	spell_button.disabled = not enabled
+	heal_button.disabled = not enabled
 	guard_button.disabled = not enabled
 
 
@@ -243,6 +275,22 @@ func _play_guard_animation() -> void:
 	action_effect_label.hide()
 
 
+func _play_heal_animation() -> void:
+	action_effect_label.text = "Heal!"
+	action_effect_label.position = action_effect_start_position
+	action_effect_label.show()
+
+	var tween: Tween = create_tween()
+	tween.tween_property(player_battler, "modulate", Color(0.45, 1, 0.65, 1), 0.12)
+	tween.tween_property(player_battler, "position", player_start_position - Vector2(0, 20), 0.14)
+	tween.tween_property(player_battler, "scale", Vector2(1.12, 1.12), 0.14)
+	tween.tween_property(player_battler, "scale", Vector2.ONE, 0.14)
+	tween.tween_property(player_battler, "position", player_start_position, 0.14)
+	tween.tween_property(player_battler, "modulate", Color.WHITE, 0.12)
+	await tween.finished
+	action_effect_label.hide()
+
+
 func _play_enemy_attack_animation() -> void:
 	action_effect_label.text = "Enemy!"
 	action_effect_label.position = action_effect_start_position
@@ -258,3 +306,11 @@ func _play_enemy_attack_animation() -> void:
 	tween.tween_property(enemy_battler, "position", enemy_start_position, 0.16)
 	await tween.finished
 	action_effect_label.hide()
+
+
+func _play_battler_disappear(battler: Node2D) -> void:
+	var tween: Tween = create_tween()
+	tween.tween_property(battler, "modulate", Color(1, 1, 1, 0), 0.25)
+	tween.tween_property(battler, "scale", Vector2(0.72, 0.72), 0.18)
+	await tween.finished
+	battler.hide()

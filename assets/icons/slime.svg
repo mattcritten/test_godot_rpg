@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="256" height="256" viewBox="0 0 256 256">
+  <title>Green slime enemy</title>
+  <ellipse cx="128" cy="218" rx="78" ry="18" fill="#111" opacity="0.25"/>
+  <path d="M47 170 C47 103 82 60 128 60 C174 60 209 103 209 170 C209 201 174 218 128 218 C82 218 47 201 47 170 Z" fill="#55c96f" stroke="#1d5d33" stroke-width="9"/>
+  <path d="M72 145 C86 96 116 77 151 82 C129 90 107 111 99 146 Z" fill="#94e6a4" opacity="0.8"/>
+  <ellipse cx="98" cy="154" rx="14" ry="18" fill="#12351d"/>
+  <ellipse cx="158" cy="154" rx="14" ry="18" fill="#12351d"/>
+  <path d="M107 182 C121 194 140 194 154 182" fill="none" stroke="#12351d" stroke-width="8" stroke-linecap="round"/>
+  <circle cx="90" cy="146" r="5" fill="#e9fff0"/>
+  <circle cx="150" cy="146" r="5" fill="#e9fff0"/>
+</svg>

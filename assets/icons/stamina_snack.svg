@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="256" height="256" viewBox="0 0 256 256">
+  <title>Stamina snack</title>
+  <ellipse cx="128" cy="224" rx="60" ry="14" fill="#111" opacity="0.22"/>
+  <path d="M58 112 C64 72 100 49 138 58 C174 66 200 96 198 135 C196 181 162 211 117 207 C72 203 51 158 58 112 Z" fill="#f1bf43" stroke="#8a4f18" stroke-width="8" stroke-linejoin="round"/>
+  <path d="M82 106 C95 78 124 66 153 75" fill="none" stroke="#fff2a7" stroke-width="10" stroke-linecap="round" opacity="0.75"/>
+  <path d="M122 96 L102 144 H128 L113 184 L166 124 H136 L151 96 Z" fill="#fff6d0" stroke="#9a6419" stroke-width="6" stroke-linejoin="round"/>
+  <circle cx="77" cy="151" r="7" fill="#a56722"/>
+  <circle cx="178" cy="151" r="6" fill="#a56722"/>
+  <circle cx="153" cy="191" r="5" fill="#a56722"/>
+</svg>

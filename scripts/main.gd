@@ -1,13 +1,20 @@
 extends Node2D
 
+const HEALTH_POTION_ICON: Texture2D = preload("res://assets/icons/health_potion.svg")
+const MANA_POTION_ICON: Texture2D = preload("res://assets/icons/mana_potion.svg")
+const STAMINA_SNACK_ICON: Texture2D = preload("res://assets/icons/stamina_snack.svg")
+
 @onready var player: CharacterBody2D = %Player
 @onready var enemy_area: Area2D = %EnemyArea
 @onready var enemy_visual: Node2D = %EnemyVisual
 @onready var prompt_label: Label = %PromptLabel
 @onready var battle_ui: TurnBasedCombat = %BattleUI
 @onready var stats_label: Label = %StatsLabel
+@onready var inventory_button: Button = %InventoryTitle
+@onready var inventory_menu: PanelContainer = %InventoryMenu
 @onready var inventory_list: ItemList = %InventoryList
 @onready var use_item_button: Button = %UseItemButton
+@onready var close_inventory_button: Button = %CloseInventoryButton
 @onready var pickup_message_label: Label = %PickupMessageLabel
 @onready var health_pickup: Area2D = %HealthPickup
 @onready var magic_pickup: Area2D = %MagicPickup
@@ -27,13 +34,16 @@ func _ready() -> void:
 	battle_ui.battle_closed.connect(_on_battle_closed)
 	player_stats.stats_changed.connect(_update_stats_label)
 	inventory.inventory_changed.connect(_update_inventory_list)
+	inventory_button.pressed.connect(_on_inventory_button_pressed)
 	inventory_list.item_selected.connect(_on_inventory_item_selected)
 	use_item_button.pressed.connect(_on_use_item_pressed)
+	close_inventory_button.pressed.connect(_on_close_inventory_pressed)
 	health_pickup.body_entered.connect(_on_health_pickup_body_entered)
 	magic_pickup.body_entered.connect(_on_magic_pickup_body_entered)
 	stamina_pickup.body_entered.connect(_on_stamina_pickup_body_entered)
 	prompt_label.hide()
 	pickup_message_label.hide()
+	inventory_menu.hide()
 	_add_starter_items()
 	_update_stats_label()
 	_update_inventory_list()
@@ -90,6 +100,14 @@ func _on_inventory_item_selected(index: int) -> void:
 	selected_item_id = inventory_list.get_item_metadata(index) as StringName
 
 
+func _on_inventory_button_pressed() -> void:
+	inventory_menu.show()
+
+
+func _on_close_inventory_pressed() -> void:
+	inventory_menu.hide()
+
+
 func _on_use_item_pressed() -> void:
 	if selected_item_id == &"":
 		_show_pickup_message("Select an item first.")
@@ -97,6 +115,8 @@ func _on_use_item_pressed() -> void:
 
 	if inventory.use_item(selected_item_id, player_stats):
 		_show_pickup_message("Used item.")
+		if inventory.is_empty():
+			inventory_menu.hide()
 	else:
 		selected_item_id = &""
 		_show_pickup_message("That item is gone.")
@@ -153,7 +173,9 @@ func _update_inventory_list() -> void:
 
 	for item: InventoryItem in inventory.get_items():
 		inventory_list.add_item("%s x%d" % [item.display_name, item.quantity])
-		inventory_list.set_item_metadata(inventory_list.get_item_count() - 1, item.item_id)
+		var item_index: int = inventory_list.get_item_count() - 1
+		inventory_list.set_item_metadata(item_index, item.item_id)
+		inventory_list.set_item_icon(item_index, _get_item_icon(item.item_id))
 
 	use_item_button.disabled = inventory.is_empty()
 
@@ -164,3 +186,16 @@ func _update_inventory_list() -> void:
 func _show_pickup_message(message: String) -> void:
 	pickup_message_label.text = message
 	pickup_message_label.show()
+
+
+func _get_item_icon(item_id: StringName) -> Texture2D:
+	if item_id == &"health_potion":
+		return HEALTH_POTION_ICON
+
+	if item_id == &"mana_potion":
+		return MANA_POTION_ICON
+
+	if item_id == &"stamina_snack":
+		return STAMINA_SNACK_ICON
+
+	return null

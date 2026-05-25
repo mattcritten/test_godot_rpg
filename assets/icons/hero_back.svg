@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="256" height="256" viewBox="0 0 256 256">
+  <title>Humanoid adventurer back view</title>
+  <ellipse cx="128" cy="224" rx="68" ry="18" fill="#111" opacity="0.28"/>
+  <path d="M86 94 C96 55 160 55 170 94 L160 145 H96 Z" fill="#244f8d" stroke="#132742" stroke-width="8" stroke-linejoin="round"/>
+  <circle cx="128" cy="61" r="34" fill="#d99d68" stroke="#5b3424" stroke-width="7"/>
+  <path d="M95 68 C94 30 124 17 151 31 C169 40 169 64 159 84 C145 67 121 60 95 68 Z" fill="#352014"/>
+  <path d="M98 95 L158 95 L152 145 L104 145 Z" fill="#4d79c7"/>
+  <path d="M91 110 L54 148 L70 166 L105 132 Z" fill="#d99d68" stroke="#5b3424" stroke-width="7" stroke-linejoin="round"/>
+  <path d="M165 110 L202 148 L186 166 L151 132 Z" fill="#d99d68" stroke="#5b3424" stroke-width="7" stroke-linejoin="round"/>
+  <path d="M104 142 L88 211 L113 211 L128 154 Z" fill="#31385d" stroke="#181c30" stroke-width="7" stroke-linejoin="round"/>
+  <path d="M152 142 L168 211 L143 211 L128 154 Z" fill="#31385d" stroke="#181c30" stroke-width="7" stroke-linejoin="round"/>
+  <path d="M112 95 L144 95 L140 144 L116 144 Z" fill="#d9bd57"/>
+</svg>
