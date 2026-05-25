@@ -1,0 +1,258 @@
+[gd_scene load_steps=9 format=3 uid="uid://dm5cb58fha8l0"]
+
+[ext_resource type="Script" path="res://scripts/main.gd" id="1_main"]
+[ext_resource type="PackedScene" uid="uid://bhbe27js7fwyr" path="res://scenes/player.tscn" id="2_player"]
+[ext_resource type="PackedScene" path="res://scenes/battle_ui.tscn" id="3_battle_ui"]
+[ext_resource type="Texture2D" uid="uid://by43h2sfufjsl" path="res://icon.svg" id="4_icon"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_enemy_trigger"]
+size = Vector2(92, 92)
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_enemy_body"]
+radius = 18.0
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_pickup"]
+radius = 22.0
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_world_border"]
+size = Vector2(1920, 24)
+
+[node name="Main" type="Node2D"]
+script = ExtResource("1_main")
+
+[node name="Background" type="ColorRect" parent="."]
+offset_right = 1920.0
+offset_bottom = 1080.0
+color = Color(0.1, 0.16, 0.14, 1)
+
+[node name="IsometricGround" type="Node2D" parent="."]
+position = Vector2(960, 480)
+
+[node name="BaseDiamond" type="Polygon2D" parent="IsometricGround"]
+color = Color(0.18, 0.34, 0.22, 1)
+polygon = PackedVector2Array(0, -360, 760, 0, 0, 360, -760, 0)
+
+[node name="InnerDiamond" type="Polygon2D" parent="IsometricGround"]
+color = Color(0.22, 0.4, 0.27, 1)
+polygon = PackedVector2Array(0, -260, 560, 0, 0, 260, -560, 0)
+
+[node name="PathDiamond" type="Polygon2D" parent="IsometricGround"]
+color = Color(0.33, 0.31, 0.2, 1)
+polygon = PackedVector2Array(-390, -42, -270, -96, 420, 210, 295, 270)
+
+[node name="NorthTile" type="Polygon2D" parent="IsometricGround"]
+color = Color(0.16, 0.29, 0.2, 1)
+polygon = PackedVector2Array(0, -360, 190, -270, 0, -180, -190, -270)
+
+[node name="EastTile" type="Polygon2D" parent="IsometricGround"]
+color = Color(0.16, 0.3, 0.21, 1)
+polygon = PackedVector2Array(380, -180, 570, -90, 380, 0, 190, -90)
+
+[node name="WestTile" type="Polygon2D" parent="IsometricGround"]
+color = Color(0.16, 0.3, 0.21, 1)
+polygon = PackedVector2Array(-380, -180, -190, -90, -380, 0, -570, -90)
+
+[node name="SouthTile" type="Polygon2D" parent="IsometricGround"]
+color = Color(0.15, 0.27, 0.19, 1)
+polygon = PackedVector2Array(0, 180, 190, 270, 0, 360, -190, 270)
+
+[node name="Player" parent="." instance=ExtResource("2_player")]
+unique_name_in_owner = true
+position = Vector2(690, 570)
+
+[node name="Camera2D" type="Camera2D" parent="Player"]
+position_smoothing_enabled = true
+position_smoothing_speed = 8.0
+
+[node name="EnemyArea" type="Area2D" parent="."]
+unique_name_in_owner = true
+position = Vector2(1180, 480)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="EnemyArea"]
+shape = SubResource("RectangleShape2D_enemy_trigger")
+
+[node name="EnemyVisual" type="Node2D" parent="EnemyArea"]
+unique_name_in_owner = true
+
+[node name="Sprite2D" type="Sprite2D" parent="EnemyArea/EnemyVisual"]
+modulate = Color(0.35, 0.9, 0.5, 1)
+position = Vector2(0, -10)
+scale = Vector2(0.38, 0.28)
+texture = ExtResource("4_icon")
+
+[node name="Shadow" type="Polygon2D" parent="EnemyArea/EnemyVisual"]
+z_index = -1
+position = Vector2(0, 22)
+color = Color(0, 0, 0, 0.28)
+polygon = PackedVector2Array(-22, 0, 0, -9, 22, 0, 0, 9)
+
+[node name="EnemyBody" type="StaticBody2D" parent="EnemyArea/EnemyVisual"]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="EnemyArea/EnemyVisual/EnemyBody"]
+shape = SubResource("CircleShape2D_enemy_body")
+
+[node name="EnemyLabel" type="Label" parent="EnemyArea/EnemyVisual"]
+offset_left = -24.0
+offset_top = -56.0
+offset_right = 24.0
+offset_bottom = -30.0
+text = "Slime"
+horizontal_alignment = 1
+
+[node name="Pickups" type="Node2D" parent="."]
+
+[node name="HealthPickup" type="Area2D" parent="Pickups"]
+unique_name_in_owner = true
+position = Vector2(560, 390)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Pickups/HealthPickup"]
+shape = SubResource("CircleShape2D_pickup")
+
+[node name="Sprite2D" type="Sprite2D" parent="Pickups/HealthPickup"]
+modulate = Color(1, 0.25, 0.25, 1)
+scale = Vector2(0.24, 0.16)
+texture = ExtResource("4_icon")
+
+[node name="Label" type="Label" parent="Pickups/HealthPickup"]
+offset_left = -60.0
+offset_top = -48.0
+offset_right = 60.0
+offset_bottom = -22.0
+theme_override_font_sizes/font_size = 22
+text = "Health"
+horizontal_alignment = 1
+
+[node name="MagicPickup" type="Area2D" parent="Pickups"]
+unique_name_in_owner = true
+position = Vector2(960, 275)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Pickups/MagicPickup"]
+shape = SubResource("CircleShape2D_pickup")
+
+[node name="Sprite2D" type="Sprite2D" parent="Pickups/MagicPickup"]
+modulate = Color(0.35, 0.45, 1, 1)
+scale = Vector2(0.24, 0.16)
+texture = ExtResource("4_icon")
+
+[node name="Label" type="Label" parent="Pickups/MagicPickup"]
+offset_left = -60.0
+offset_top = -48.0
+offset_right = 60.0
+offset_bottom = -22.0
+theme_override_font_sizes/font_size = 22
+text = "Magic"
+horizontal_alignment = 1
+
+[node name="StaminaPickup" type="Area2D" parent="Pickups"]
+unique_name_in_owner = true
+position = Vector2(1370, 690)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Pickups/StaminaPickup"]
+shape = SubResource("CircleShape2D_pickup")
+
+[node name="Sprite2D" type="Sprite2D" parent="Pickups/StaminaPickup"]
+modulate = Color(1, 0.85, 0.2, 1)
+scale = Vector2(0.24, 0.16)
+texture = ExtResource("4_icon")
+
+[node name="Label" type="Label" parent="Pickups/StaminaPickup"]
+offset_left = -60.0
+offset_top = -48.0
+offset_right = 60.0
+offset_bottom = -22.0
+theme_override_font_sizes/font_size = 22
+text = "Stamina"
+horizontal_alignment = 1
+
+[node name="WorldBorder" type="StaticBody2D" parent="."]
+
+[node name="TopWall" type="CollisionShape2D" parent="WorldBorder"]
+position = Vector2(960, -12)
+shape = SubResource("RectangleShape2D_world_border")
+
+[node name="BottomWall" type="CollisionShape2D" parent="WorldBorder"]
+position = Vector2(960, 1092)
+shape = SubResource("RectangleShape2D_world_border")
+
+[node name="LeftWall" type="CollisionShape2D" parent="WorldBorder"]
+position = Vector2(-12, 540)
+rotation = 1.5708
+shape = SubResource("RectangleShape2D_world_border")
+
+[node name="RightWall" type="CollisionShape2D" parent="WorldBorder"]
+position = Vector2(1932, 540)
+rotation = 1.5708
+shape = SubResource("RectangleShape2D_world_border")
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+
+[node name="HudPanel" type="PanelContainer" parent="CanvasLayer"]
+offset_left = 24.0
+offset_top = 24.0
+offset_right = 440.0
+offset_bottom = 394.0
+
+[node name="MarginContainer" type="MarginContainer" parent="CanvasLayer/HudPanel"]
+layout_mode = 2
+theme_override_constants/margin_left = 22
+theme_override_constants/margin_top = 18
+theme_override_constants/margin_right = 22
+theme_override_constants/margin_bottom = 20
+
+[node name="VBoxContainer" type="VBoxContainer" parent="CanvasLayer/HudPanel/MarginContainer"]
+layout_mode = 2
+theme_override_constants/separation = 14
+
+[node name="StatsLabel" type="Label" parent="CanvasLayer/HudPanel/MarginContainer/VBoxContainer"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(350, 126)
+layout_mode = 2
+theme_override_font_sizes/font_size = 28
+text = "Health 40/40
+Magic 20/20
+Stamina 25/25"
+
+[node name="InventoryTitle" type="Label" parent="CanvasLayer/HudPanel/MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 24
+text = "Inventory"
+
+[node name="InventoryList" type="ItemList" parent="CanvasLayer/HudPanel/MarginContainer/VBoxContainer"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(350, 120)
+layout_mode = 2
+theme_override_font_sizes/font_size = 24
+
+[node name="UseItemButton" type="Button" parent="CanvasLayer/HudPanel/MarginContainer/VBoxContainer"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(350, 48)
+layout_mode = 2
+theme_override_font_sizes/font_size = 22
+text = "Use"
+
+[node name="PickupMessageLabel" type="Label" parent="CanvasLayer"]
+unique_name_in_owner = true
+visible = false
+offset_left = 640.0
+offset_top = 28.0
+offset_right = 1280.0
+offset_bottom = 76.0
+theme_override_font_sizes/font_size = 28
+text = "Picked up item."
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="PromptLabel" type="Label" parent="CanvasLayer"]
+unique_name_in_owner = true
+visible = false
+offset_left = 680.0
+offset_top = 930.0
+offset_right = 1240.0
+offset_bottom = 982.0
+theme_override_font_sizes/font_size = 28
+text = "Press Enter or Space to battle"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="BattleUI" parent="CanvasLayer" instance=ExtResource("3_battle_ui")]
+unique_name_in_owner = true

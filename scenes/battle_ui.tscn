@@ -1,0 +1,196 @@
+[gd_scene load_steps=3 format=3]
+
+[ext_resource type="Script" path="res://scripts/turn_based_combat.gd" id="1_combat"]
+[ext_resource type="Texture2D" uid="uid://by43h2sfufjsl" path="res://icon.svg" id="2_icon"]
+
+[node name="BattleUI" type="Control"]
+visible = false
+process_mode = 3
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_combat")
+
+[node name="DimBackground" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.02, 0.025, 0.035, 0.82)
+
+[node name="Panel" type="PanelContainer" parent="."]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -760.0
+offset_top = -460.0
+offset_right = 760.0
+offset_bottom = 460.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="Panel"]
+layout_mode = 2
+theme_override_constants/margin_left = 28
+theme_override_constants/margin_top = 24
+theme_override_constants/margin_right = 28
+theme_override_constants/margin_bottom = 24
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Panel/MarginContainer"]
+layout_mode = 2
+theme_override_constants/separation = 18
+
+[node name="TitleLabel" type="Label" parent="Panel/MarginContainer/VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_font_sizes/font_size = 38
+text = "Battle"
+horizontal_alignment = 1
+
+[node name="Battlefield" type="PanelContainer" parent="Panel/MarginContainer/VBoxContainer"]
+custom_minimum_size = Vector2(0, 500)
+layout_mode = 2
+
+[node name="FieldRoot" type="Control" parent="Panel/MarginContainer/VBoxContainer/Battlefield"]
+layout_mode = 2
+
+[node name="Sky" type="ColorRect" parent="Panel/MarginContainer/VBoxContainer/Battlefield/FieldRoot"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.52, 0.7, 0.82, 1)
+
+[node name="Ground" type="Polygon2D" parent="Panel/MarginContainer/VBoxContainer/Battlefield/FieldRoot"]
+position = Vector2(730, 360)
+color = Color(0.24, 0.5, 0.25, 1)
+polygon = PackedVector2Array(-730, -50, 730, -120, 730, 140, -730, 140)
+
+[node name="EnemyPlatform" type="Polygon2D" parent="Panel/MarginContainer/VBoxContainer/Battlefield/FieldRoot"]
+position = Vector2(1030, 260)
+color = Color(0.68, 0.75, 0.55, 1)
+polygon = PackedVector2Array(-180, 0, 0, -58, 180, 0, 0, 58)
+
+[node name="PlayerPlatform" type="Polygon2D" parent="Panel/MarginContainer/VBoxContainer/Battlefield/FieldRoot"]
+position = Vector2(420, 400)
+color = Color(0.61, 0.68, 0.47, 1)
+polygon = PackedVector2Array(-240, 0, 0, -78, 240, 0, 0, 78)
+
+[node name="EnemyBattler" type="Node2D" parent="Panel/MarginContainer/VBoxContainer/Battlefield/FieldRoot"]
+unique_name_in_owner = true
+position = Vector2(1030, 190)
+
+[node name="EnemySprite" type="Sprite2D" parent="Panel/MarginContainer/VBoxContainer/Battlefield/FieldRoot/EnemyBattler"]
+modulate = Color(0.35, 0.9, 0.5, 1)
+scale = Vector2(1.15, 0.95)
+texture = ExtResource("2_icon")
+
+[node name="PlayerBattler" type="Node2D" parent="Panel/MarginContainer/VBoxContainer/Battlefield/FieldRoot"]
+unique_name_in_owner = true
+position = Vector2(420, 320)
+
+[node name="PlayerBackSprite" type="Sprite2D" parent="Panel/MarginContainer/VBoxContainer/Battlefield/FieldRoot/PlayerBattler"]
+modulate = Color(0.95, 0.95, 1, 1)
+scale = Vector2(1.35, 1.05)
+texture = ExtResource("2_icon")
+flip_h = true
+
+[node name="ActionEffectLabel" type="Label" parent="Panel/MarginContainer/VBoxContainer/Battlefield/FieldRoot"]
+unique_name_in_owner = true
+visible = false
+offset_left = 560.0
+offset_top = 165.0
+offset_right = 900.0
+offset_bottom = 235.0
+theme_override_font_sizes/font_size = 42
+text = "Hit!"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="StatsContainer" type="GridContainer" parent="Panel/MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/h_separation = 28
+theme_override_constants/v_separation = 10
+columns = 2
+
+[node name="PlayerHpLabel" type="Label" parent="Panel/MarginContainer/VBoxContainer/StatsContainer"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(650, 44)
+layout_mode = 2
+theme_override_font_sizes/font_size = 30
+text = "Health: 40 / 40"
+
+[node name="EnemyHpLabel" type="Label" parent="Panel/MarginContainer/VBoxContainer/StatsContainer"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(650, 44)
+layout_mode = 2
+theme_override_font_sizes/font_size = 30
+text = "Slime HP: 24 / 24"
+horizontal_alignment = 2
+
+[node name="PlayerMagicLabel" type="Label" parent="Panel/MarginContainer/VBoxContainer/StatsContainer"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(650, 44)
+layout_mode = 2
+theme_override_font_sizes/font_size = 30
+text = "Magic: 20 / 20"
+
+[node name="PlayerStaminaLabel" type="Label" parent="Panel/MarginContainer/VBoxContainer/StatsContainer"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(650, 44)
+layout_mode = 2
+theme_override_font_sizes/font_size = 30
+text = "Stamina: 25 / 25"
+horizontal_alignment = 2
+
+[node name="MessageLabel" type="Label" parent="Panel/MarginContainer/VBoxContainer"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 88)
+layout_mode = 2
+theme_override_font_sizes/font_size = 34
+text = "Choose an action."
+autowrap_mode = 3
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="ActionsContainer" type="HBoxContainer" parent="Panel/MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/separation = 22
+alignment = 1
+
+[node name="AttackButton" type="Button" parent="Panel/MarginContainer/VBoxContainer/ActionsContainer"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(250, 72)
+layout_mode = 2
+theme_override_font_sizes/font_size = 30
+text = "Attack"
+
+[node name="SpellButton" type="Button" parent="Panel/MarginContainer/VBoxContainer/ActionsContainer"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(250, 72)
+layout_mode = 2
+theme_override_font_sizes/font_size = 30
+text = "Spell"
+
+[node name="GuardButton" type="Button" parent="Panel/MarginContainer/VBoxContainer/ActionsContainer"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(250, 72)
+layout_mode = 2
+theme_override_font_sizes/font_size = 30
+text = "Guard"
+
+[node name="CloseButton" type="Button" parent="Panel/MarginContainer/VBoxContainer"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 64)
+layout_mode = 2
+theme_override_font_sizes/font_size = 28
+text = "Close"
